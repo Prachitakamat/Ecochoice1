@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Choice</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; 
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: #cfd4b2;
+            color: #2b4c27;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #4a6b3b;
+            padding: 1.5rem 2% 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        nav {
+            display: flex;
+            gap: 3rem;
+        }
+
+        nav a {
+            color: #f7f5dc;
+            text-decoration: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .logo-img {
+            max-height: 150px;
+            width: auto;
+            margin-left: auto;
+            object-fit: contain;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-view {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .page-view.active {
+            display: flex;
+        }
+
+        #home {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .search-btn-container {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .search-btn {
+            background-color: #4a6b3b;
+            color: #f7f5dc;
+            border: none;
+            padding: 0.9rem 2.5rem;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 30px !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .search-btn:hover {
+            background-color: #38532c;
+            transform: scale(1.02);
+        }
+
+        .search-icon {
+            width: 20px;
+            height: 20px;
+            stroke: #f7f5dc;
+            stroke-width: 2.5;
+            fill: none;
+        }
+
+        /* PRODUCTS PAGE STYLING */
+        #products {
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2rem;
+            overflow-y: auto;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 340px);
+            gap: 3.5rem 3rem;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+
+        .category-box {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            overflow: hidden;
+            background-color: #d8dabf;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .category-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 85%;
+            overflow-y: auto;
+            background-color: rgba(74, 107, 59, 0.95);
+            padding: 0.75rem 0;
+            text-align: center;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: #f7f5dc;
+            text-decoration: none;
+            padding: 0.6rem 0.5rem;
+            font-size: 1.05rem;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #38532c;
+        }
+
+        .dropdown-menu a.all-products-link {
+            font-weight: bold;
+            border-bottom: 1px solid rgba(247, 245, 220, 0.3);
+            margin-bottom: 0.25rem;
+            padding-bottom: 0.65rem;
+        }
+
+        .category-box:hover .dropdown-menu {
+            display: block;
+        }
+
+        .empty-page {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .empty-page h1 {
+            font-size: 2.5rem;
+            color: #4a6b3b;
+        }
+
+        @media (max-width: 1200px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 340px);
+                gap: 2.5rem;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .category-grid {
+                grid-template-columns: repeat(1, 340px);
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-img {
+                max-height: 70px;
+                margin-left: 0;
+            }
+
+            .search-btn-container {
+                bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header>
+        <nav>
+            <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+            <a onclick="showPage('products')" id="nav-products">Products</a>
+            <a onclick="showPage('about')" id="nav-about">About us</a>
+        </nav>
+        
+        <!-- Header Logo Image -->
+        <img src="ecochoicelogo.png" alt="Eco Choice Logo" class="logo-img">
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- HOME PAGE -->
+        <div id="home" class="page-view active">
+            <div class="hero-image-container">
+                <img src="bgimage1.png" alt="Eco Choice Banner" class="hero-img">
+            </div>
+
+            <!-- Search Button -->
+            <div class="search-btn-container">
+                <button class="search-btn" onclick="showPage('products')">
+                    <svg class="search-icon" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Search Products
+                </button>
+            </div>
+        </div>
+
+        <!-- PRODUCTS PAGE -->
+        <div id="products" class="page-view">
+            <div class="category-grid" id="categoryGrid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <!-- ABOUT US PAGE (EMPTY) -->
+        <div id="about" class="page-view empty-page">
+            <h1>About Us Page</h1>
+        </div>
+    </main>
+
+    <!-- Navigation & Dynamic Rendering Script -->
+    <script>
+        // Category Mappings & Images
+        const categoryDict = {
+            1: 'laundry',
+            2: 'cleaning',
+            3: 'misc_household',
+            4: 'stationery',
+            5: 'self_care',
+            6: 'health'
+        };
+
+        const imageFileMap = {
+            'laundry': 'laundry.png',
+            'cleaning': 'cleaning.png',
+            'misc_household': 'household.png',
+            'stationery': 'stationery.png',
+            'self_care': 'selfcare.png',
+            'health': 'health.png'
+        };
+
+        // Grouped Sub-categories for each category
+        const subCategoryGroupings = [
+            // 1: Laundry
+            ['Detergents & Washes', 'Fabric Softeners', 'Stain Removers'],
+
+            // 2: Cleaning
+            ['Surface Cleaners', 'Dishwashing', 'Cleaning Tools'],
+
+            // 3: Misc Household
+            ['Paper Products', 'Air Care'],
+
+            // 4: Stationery
+            ['Writing Essentials', 'Paper & Notebooks', 'Art & Craft Supplies', 'Office Tools'],
+
+            // 5: Self Care
+            ['Skincare & Sun Care', 'Haircare', 'Bath & Body', 'Oral Care'],
+
+            // 6: Health
+            ['First Aid Essentials', 'Antiseptics', 'Digestive Health', 'Health Monitoring']
+        ];
+
+        // Generate Category Cards Dynamically
+        function renderCategories() {
+            const gridContainer = document.getElementById('categoryGrid');
+            gridContainer.innerHTML = '';
+
+            Object.keys(categoryDict).forEach((key, index) => {
+                const catName = categoryDict[key];
+                const imageSrc = imageFileMap[catName];
+                const subGroups = subCategoryGroupings[index];
+
+                const box = document.createElement('div');
+                box.className = 'category-box';
+
+                let itemsHtml = `<a href="#" class="all-products-link">All Products</a>`;
+                subGroups.forEach(group => {
+                    itemsHtml += `<a href="#">${group}</a>`;
+                });
+
+                box.innerHTML = `
+                    <img src="${imageSrc}" alt="${catName}" class="category-img">
+                    <div class="dropdown-menu">
+                        ${itemsHtml}
+                    </div>
+                `;
+
+                gridContainer.appendChild(box);
+            });
+        }
+
+        // Initialize Rendering
+        renderCategories();
+
+        // Page Navigation Logic
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page-view');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
