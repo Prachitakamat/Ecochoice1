@@ -46,7 +46,7 @@
             transition: opacity 0.2s;
         }
 
-        nav a:hover, nav a.active {
+        nav a:hover {
             opacity: 0.8;
             text-decoration: underline;
         }
@@ -73,8 +73,30 @@
             height: 100%;
         }
 
-        .page-view.active {
+        #home,
+        .page-view:target {
+            display: none;
+        }
+
+        body:not(:has(:target)) #home,
+        #home:target {
             display: flex;
+        }
+
+        #products:target {
+            display: flex;
+        }
+
+        #about:target {
+            display: flex;
+        }
+
+        body:not(:has(:target)) nav a[href="#home"],
+        body:has(#home:target) nav a[href="#home"],
+        body:has(#products:target) nav a[href="#products"],
+        body:has(#about:target) nav a[href="#about"] {
+            opacity: 0.8;
+            text-decoration: underline;
         }
 
         #home {
@@ -120,6 +142,7 @@
             border-radius: 30px !important;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transition: background-color 0.2s, transform 0.2s;
+            text-decoration: none;
         }
 
         .search-btn:hover {
@@ -135,7 +158,7 @@
             fill: none;
         }
 
-        /* PRODUCTS PAGE STYLING */
+
         #products {
             justify-content: center;
             align-items: center;
@@ -252,140 +275,117 @@
 </head>
 <body>
 
-    <!-- Header / Navigation -->
     <header>
         <nav>
-            <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
-            <a onclick="showPage('products')" id="nav-products">Products</a>
-            <a onclick="showPage('about')" id="nav-about">About us</a>
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About us</a>
         </nav>
-        
-        <!-- Header Logo Image -->
+
+
         <img src="ecochoicelogo.png" alt="Eco Choice Logo" class="logo-img">
     </header>
 
-    <!-- Main Content Area -->
+    <!--home-->
     <main>
-        <!-- HOME PAGE -->
-        <div id="home" class="page-view active">
+        
+        <div id="home" class="page-view">
             <div class="hero-image-container">
                 <img src="bgimage1.png" alt="Eco Choice Banner" class="hero-img">
             </div>
 
-            <!-- Search Button -->
+            
             <div class="search-btn-container">
-                <button class="search-btn" onclick="showPage('products')">
+                <a href="#products" class="search-btn">
                     <svg class="search-icon" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                     Search Products
-                </button>
+                </a>
             </div>
         </div>
 
-        <!-- PRODUCTS PAGE -->
+        <!--products-->
         <div id="products" class="page-view">
-            <div class="category-grid" id="categoryGrid">
-                <!-- Dynamically populated via JS -->
+            <div class="category-grid">
+                
+                <!-- Laundry -->
+                <div class="category-box">
+                    <img src="laundry.png" alt="laundry" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">Detergents & Washes</a>
+                        <a href="#">Fabric Softeners</a>
+                        <a href="#">Stain Removers</a>
+                    </div>
+                </div>
+
+                <!-- Cleaning -->
+                <div class="category-box">
+                    <img src="cleaning.png" alt="cleaning" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">Surface Cleaners</a>
+                        <a href="#">Dishwashing</a>
+                        <a href="#">Cleaning Tools</a>
+                    </div>
+                </div>
+
+                <!-- household -->
+                <div class="category-box">
+                    <img src="household.png" alt="misc_household" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">Paper Products</a>
+                        <a href="#">Air Care</a>
+                    </div>
+                </div>
+
+                <!-- stationery -->
+                <div class="category-box">
+                    <img src="stationery.png" alt="stationery" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">Writing Essentials</a>
+                        <a href="#">Paper & Notebooks</a>
+                        <a href="#">Art & Craft Supplies</a>
+                        <a href="#">Office Tools</a>
+                    </div>
+                </div>
+
+                <!-- selfcare -->
+                <div class="category-box">
+                    <img src="selfcare.png" alt="self_care" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">Skincare & Sun Care</a>
+                        <a href="#">Haircare</a>
+                        <a href="#">Bath & Body</a>
+                        <a href="#">Oral Care</a>
+                    </div>
+                </div>
+
+                <!-- health -->
+                <div class="category-box">
+                    <img src="health.png" alt="health" class="category-img">
+                    <div class="dropdown-menu">
+                        <a href="#" class="all-products-link">All Products</a>
+                        <a href="#">First Aid Essentials</a>
+                        <a href="#">Antiseptics</a>
+                        <a href="#">Digestive Health</a>
+                        <a href="#">Health Monitoring</a>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- ABOUT US PAGE (EMPTY) -->
+        <!--aboutus-->
         <div id="about" class="page-view empty-page">
             <h1>About Us Page</h1>
         </div>
     </main>
 
-    <!-- Navigation & Dynamic Rendering Script -->
-    <script>
-        // Category Mappings & Images
-        const categoryDict = {
-            1: 'laundry',
-            2: 'cleaning',
-            3: 'misc_household',
-            4: 'stationery',
-            5: 'self_care',
-            6: 'health'
-        };
-
-        const imageFileMap = {
-            'laundry': 'laundry.png',
-            'cleaning': 'cleaning.png',
-            'misc_household': 'household.png',
-            'stationery': 'stationery.png',
-            'self_care': 'selfcare.png',
-            'health': 'health.png'
-        };
-
-        // Grouped Sub-categories for each category
-        const subCategoryGroupings = [
-            // 1: Laundry
-            ['Detergents & Washes', 'Fabric Softeners', 'Stain Removers'],
-
-            // 2: Cleaning
-            ['Surface Cleaners', 'Dishwashing', 'Cleaning Tools'],
-
-            // 3: Misc Household
-            ['Paper Products', 'Air Care'],
-
-            // 4: Stationery
-            ['Writing Essentials', 'Paper & Notebooks', 'Art & Craft Supplies', 'Office Tools'],
-
-            // 5: Self Care
-            ['Skincare & Sun Care', 'Haircare', 'Bath & Body', 'Oral Care'],
-
-            // 6: Health
-            ['First Aid Essentials', 'Antiseptics', 'Digestive Health', 'Health Monitoring']
-        ];
-
-        // Generate Category Cards Dynamically
-        function renderCategories() {
-            const gridContainer = document.getElementById('categoryGrid');
-            gridContainer.innerHTML = '';
-
-            Object.keys(categoryDict).forEach((key, index) => {
-                const catName = categoryDict[key];
-                const imageSrc = imageFileMap[catName];
-                const subGroups = subCategoryGroupings[index];
-
-                const box = document.createElement('div');
-                box.className = 'category-box';
-
-                let itemsHtml = `<a href="#" class="all-products-link">All Products</a>`;
-                subGroups.forEach(group => {
-                    itemsHtml += `<a href="#">${group}</a>`;
-                });
-
-                box.innerHTML = `
-                    <img src="${imageSrc}" alt="${catName}" class="category-img">
-                    <div class="dropdown-menu">
-                        ${itemsHtml}
-                    </div>
-                `;
-
-                gridContainer.appendChild(box);
-            });
-        }
-
-        // Initialize Rendering
-        renderCategories();
-
-        // Page Navigation Logic
-        function showPage(pageId) {
-            const pages = document.querySelectorAll('.page-view');
-            pages.forEach(page => page.classList.remove('active'));
-
-            const navLinks = document.querySelectorAll('nav a');
-            navLinks.forEach(link => link.classList.remove('active'));
-
-            document.getElementById(pageId).classList.add('active');
-
-            const activeNav = document.getElementById('nav-' + pageId);
-            if (activeNav) {
-                activeNav.classList.add('active');
-            }
-        }
-    </script>
 </body>
 </html>
